@@ -8,16 +8,18 @@ import javax.swing.JLabel;
 class TimerExample implements IUserPlayable{
     private  Timer timer;
     private MyTimerTask timerTask;
+    private JLabel label;
 
     public TimerExample(JLabel jLabel) {
-        timer = new Timer();      
-        timerTask=new MyTimerTask(jLabel);
+        this.label=jLabel;
     }
 
 
     
     @Override
     public void Start() {
+        timer = new Timer();      
+        timerTask=new MyTimerTask(label);
         timerTask.setStartTime(System.currentTimeMillis());
         timer.scheduleAtFixedRate(timerTask,0,1000) ;
     }
@@ -31,23 +33,23 @@ class TimerExample implements IUserPlayable{
 
 
     @Override
-    public void Stop() {
-        //timerTask.cancel();
-        timer.cancel();
+    public void Pause() {
+
     }
 
 
     @Override
     public void Reset() {
-        
-        throw new UnsupportedOperationException("Unimplemented method 'Reset'");
+        label.setText("00:00:00");
+        timerTask.cancel();
+        timer.cancel();
     }
 }
 
 class MyTimerTask extends TimerTask {
     private  long startTime;
     private JLabel label;
-
+    private Tuple<Integer> tuple=new Tuple<Integer>();
     public MyTimerTask(JLabel label){
         this.label=label;
     }
@@ -55,7 +57,7 @@ class MyTimerTask extends TimerTask {
         var seconds = (int) (diff / TimerDatas.ONE_SECOND) % TimerDatas.ONE_HOUR_TO_MINUTES;
         var minutes = (int) ((diff / (TimerDatas.ONE_SECOND * TimerDatas.ONE_HOUR_TO_MINUTES)) % TimerDatas.ONE_HOUR_TO_MINUTES);
         var hours = (int) ((diff / (TimerDatas.ONE_SECOND * TimerDatas.ONE_HOUR_TO_MINUTES * TimerDatas.ONE_HOUR_TO_MINUTES)) % TimerDatas.ONE_DAY_TO_HOURS);
-        return new Tuple<Integer>(hours, minutes, seconds);
+        return tuple.returnTuple(hours,minutes,seconds);
     }
     @Override
     public void run() {

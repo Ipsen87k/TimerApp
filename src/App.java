@@ -15,9 +15,9 @@ public class App {
 }
 final class MyFrame extends JFrame{
 
-    private JLabel label=new JLabel("test");
+    private JLabel label=new JLabel("00:00:00");
     private JButton starButton=new JButton("Start");
-    private JButton stopButton=new JButton("Stop");
+    private JButton stopButton=new JButton("Reset");
     private JButton pauseButton=new JButton("Puase");
     private IUserPlayable timIUserPlayable=new TimerExample(label);
     public JLabel getLabel() {
@@ -39,11 +39,12 @@ final class MyFrame extends JFrame{
         });
         stopButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
-                timIUserPlayable.Stop();
+                timIUserPlayable.Reset();
             }
         });
     }
     private void InitAdd(){
+        label.setFont(new Font("Arial", Font.PLAIN, 40));
         label.setHorizontalAlignment(JLabel.CENTER);
         getContentPane().setLayout(new GridLayout(2, 1));
         getContentPane().add(label);
@@ -56,20 +57,17 @@ final class MyFrame extends JFrame{
     }
 }
 
-interface IStopable{
-    void Stop();
-    final String text="Stop";
+interface IPauseable{
+    void Pause();
 }
 interface IResetable{
     void Reset();
-    final String text="Reset";
 }
 
 interface IStartable extends ActionListener{
     void Start();
-    final String text="Start";
 }
-interface IUserPlayable extends IStartable,IStopable,IResetable{
+interface IUserPlayable extends IStartable,IPauseable,IResetable{
 
 }
 
@@ -78,10 +76,12 @@ class Tuple<T> {
     public T second;
     public T third;
 
-    public Tuple(T first, T second, T third) {
+    public Tuple<T> returnTuple(T first,T second,T third) {
         this.first = first;
         this.second = second;
         this.third=third;
+        return this;
     }
+
 }
 
